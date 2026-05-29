@@ -1,0 +1,54 @@
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white text-center py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-plus me-2"></i>Crear cuenta
+                </h4>
+                <small class="text-muted">Regístrate para acceder al catálogo</small>
+            </div>
+            <div class="card-body p-4">
+
+                {{> mensajeError}}
+
+                <form action="/auth/registro" method="POST">
+
+                    <div class="mb-3">
+                        <label for="nomUsu" class="form-label fw-semibold">
+                            <i class="bi bi-person me-1"></i>Nombre de usuario
+                        </label>
+                        <input type="text"
+                               id="nomUsu"
+                               name="nomUsu"
+                               class="form-control"
+                               placeholder="Mínimo 3 caracteres"
+                               value="{{datos.nomUsu}}"
+                               autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="passUsu" class="form-label fw-semibold">
+                            <i class="bi bi-lock me-1"></i>Contraseña
+                        </label>
+                        <input type="password"
+                               id="passUsu"
+                               name="passUsu"
+                               class="form-control"
+                               placeholder="Mínimo 6 caracteres">
+                        <div class="form-text">La contraseña se almacena cifrada con bcrypt.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-2">
+                        <i class="bi bi-person-check me-1"></i>Registrarse
+                    </button>
+                </form>
+
+                <hr>
+                <p class="text-center mb-0 text-muted">
+                    ¿Ya tienes cuenta?
+                    <a href="/auth/login" class="text-decoration-none fw-semibold">Inicia sesión</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

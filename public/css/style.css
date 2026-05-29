@@ -1,0 +1,80 @@
+/* Tipografía base y color de fondo de toda la aplicación */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Resalta la fila de la tabla al pasar el cursor */
+.table-hover tbody tr:hover {
+    background-color: #f0f4ff;
+    transition: background-color 0.2s ease;
+}
+
+.card {
+    border-radius: 12px;
+    border: none;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+}
+
+.img-thumbnail {
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+}
+
+.badge.fs-6 {
+    font-size: 0.9rem !important;
+    font-weight: 600;
+    padding: 6px 12px;
+}
+
+.btn-warning,
+.btn-danger,
+.btn-primary {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos del cuadro de chat */
+#cajaMensajes {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #ffffff;
+}
+
+.burbujaMensaje {
+    background-color: #e8f0fe;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.burbujaPropia {
+    background-color: #d4edda;
+    text-align: right;
+    float: right;
+    clear: both;
+}
+
+.burbujaOtro {
+    float: left;
+    clear: both;
+}
+
+.limpiarFloat::after {
+    content: '';
+    display: table;
+    clear: both;
+}

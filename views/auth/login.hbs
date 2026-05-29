@@ -1,0 +1,53 @@
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white text-center py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-bag-check me-2"></i>MercApp
+                </h4>
+                <small class="text-muted">Inicia sesión para continuar</small>
+            </div>
+            <div class="card-body p-4">
+
+                {{> mensajeError}}
+
+                <form action="/auth/login" method="POST">
+
+                    <div class="mb-3">
+                        <label for="nomUsu" class="form-label fw-semibold">
+                            <i class="bi bi-person me-1"></i>Usuario
+                        </label>
+                        <input type="text"
+                               id="nomUsu"
+                               name="nomUsu"
+                               class="form-control"
+                               placeholder="Tu nombre de usuario"
+                               value="{{datos.nomUsu}}"
+                               autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="passUsu" class="form-label fw-semibold">
+                            <i class="bi bi-lock me-1"></i>Contraseña
+                        </label>
+                        <input type="password"
+                               id="passUsu"
+                               name="passUsu"
+                               class="form-control"
+                               placeholder="Tu contraseña">
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-2">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
+                    </button>
+                </form>
+
+                <hr>
+                <p class="text-center mb-0 text-muted">
+                    ¿No tienes cuenta?
+                    <a href="/auth/registro" class="text-decoration-none fw-semibold">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
