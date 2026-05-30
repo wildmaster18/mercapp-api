@@ -133,9 +133,9 @@ async function ejecutarSemilla() {
         console.log('Se insertaron ' + productosIniciales.length + ' productos');
 
         // Crea el usuario administrador de prueba con contraseña hasheada
-        const passHasheada = await bcrypt.hash('admin', 10);
+        const passHasheada = await bcrypt.hash('admin123', 10);
         await Usuario.create({ nomUsu: 'admin', passUsu: passHasheada });
-        console.log('Usuario de prueba creado: admin / admin');
+        console.log('Usuario de prueba creado: admin / admin123');
 
         await mongoose.disconnect();
         console.log('Semilla completada con exito');

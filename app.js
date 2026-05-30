@@ -22,9 +22,20 @@ const rutasApi = require("./routes/api");
 const origenesPermitidos = [];
 if (process.env.FRONTEND_URL) origenesPermitidos.push(process.env.FRONTEND_URL);
 if (process.env.NETLIFY_URL) origenesPermitidos.push(process.env.NETLIFY_URL);
-// Origen local para desarrollo
+
+// En produccion debe existir al menos un origen valido, no se permite comodin
+if (process.env.NODE_ENV === "production" && origenesPermitidos.length === 0) {
+  throw new Error("FRONTEND_URL o NETLIFY_URL son obligatorios en produccion");
+}
+
+// En desarrollo se permite el frontend local de Vite
 if (origenesPermitidos.length === 0)
   origenesPermitidos.push("http://localhost:5173");
+
+// SESSION_SECRET no puede usar un valor por defecto en produccion
+if (process.env.NODE_ENV === "production" && !process.env.SESSION_SECRET) {
+  throw new Error("SESSION_SECRET es obligatorio en produccion");
+}
 
 // Crea la aplicación de Express y el servidor HTTP para Socket.io
 const app = express();
@@ -102,7 +113,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Manejo de sesiones de usuario para las vistas Handlebars
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "claveSecretaMercApp",
+    secret: process.env.SESSION_SECRET || "claveSecretaMercAppDesarrollo",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -118,6 +129,29 @@ app.use("/auth", rutasAuth);
 app.use("/productos", rutasProductos);
 app.use("/chat", rutasChat);
 app.use("/api", rutasApi);
+
+// Construye el objeto de estado del servidor y la base de datos
+const mongoose = require("mongoose");
+function estadoSalud() {
+  const estadoBD = mongoose.connection.readyState;
+  const estados = {
+    0: "desconectada",
+    1: "conectada",
+    2: "conectando",
+    3: "desconectando",
+  };
+  return {
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    database: estados[estadoBD] || "desconocido",
+    uptime: Math.floor(process.uptime()) + "s",
+  };
+}
+
+// Endpoint de salud directo, util para revisiones rapidas del despliegue
+app.get("/health", (req, res) => {
+  res.json(estadoSalud());
+});
 
 // Ruta raiz: muestra una pagina informativa del API REST con enlaces utiles
 app.get("/", (req, res) => {

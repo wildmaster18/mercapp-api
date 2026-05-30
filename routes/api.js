@@ -125,6 +125,16 @@ function procesarImagen(req, res, next) {
   });
 }
 
+// Protege las rutas que modifican datos: exige una sesion activa
+function requiereSesion(req, res, next) {
+  if (req.session && req.session.usuario) {
+    return next();
+  }
+  return res.status(401).json({
+    error: "Debes iniciar sesion para realizar esta accion",
+  });
+}
+
 // Devuelve la lista completa de productos
 router.get("/products", async (req, res) => {
   try {
@@ -159,7 +169,7 @@ router.get("/products/:id", async (req, res) => {
 });
 
 // Crea un nuevo producto a partir de un FormData
-router.post("/products", procesarImagen, validarProducto, async (req, res) => {
+router.post("/products", requiereSesion, procesarImagen, validarProducto, async (req, res) => {
   try {
     if (req.errorImagen) {
       return res.status(400).json({
@@ -204,6 +214,7 @@ router.post("/products", procesarImagen, validarProducto, async (req, res) => {
 // Actualiza un producto completo
 router.put(
   "/products/:id",
+  requiereSesion,
   procesarImagen,
   validarProducto,
   async (req, res) => {
@@ -270,6 +281,7 @@ router.put(
 // Actualiza parcialmente un producto
 router.patch(
   "/products/:id",
+  requiereSesion,
   procesarImagen,
   validarProductoParcial,
   async (req, res) => {
@@ -328,7 +340,7 @@ router.patch(
 );
 
 // Elimina un producto por su id
-router.delete("/products/:id", async (req, res) => {
+router.delete("/products/:id", requiereSesion, async (req, res) => {
   try {
     const productoEliminado = await Producto.findByIdAndDelete(req.params.id);
     if (!productoEliminado) {
@@ -366,6 +378,7 @@ router.get("/categories", async (req, res) => {
 // Crea una nueva categoría con un id autoincremental
 router.post(
   "/categories",
+  requiereSesion,
   [
     body("name")
       .trim()
