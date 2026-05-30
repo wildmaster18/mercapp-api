@@ -29,6 +29,10 @@ if (origenesPermitidos.length === 0)
 // Crea la aplicación de Express y el servidor HTTP para Socket.io
 const app = express();
 const servidor = http.createServer(app);
+
+// Confia en el proxy de Railway para que la cookie secure y el rate limit funcionen correctamente
+app.set("trust proxy", 1);
+
 const io = socketIo(servidor, {
   cors: {
     origin: origenesPermitidos,
@@ -115,13 +119,37 @@ app.use("/productos", rutasProductos);
 app.use("/chat", rutasChat);
 app.use("/api", rutasApi);
 
-// Ruta raíz: redirige según el estado de la sesión
+// Ruta raiz: muestra una pagina informativa del API REST con enlaces utiles
 app.get("/", (req, res) => {
-  if (req.session && req.session.usuario) {
-    res.redirect("/productos");
-  } else {
-    res.redirect("/auth/login");
-  }
+  res.send(`<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MercApp API REST</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+  .caja { background:#1e293b; padding:2.5rem; border-radius:14px; max-width:520px; width:90%; box-shadow:0 10px 30px rgba(0,0,0,0.3); }
+  h1 { color:#a78bfa; margin:0 0 0.4rem; font-size:1.5rem; }
+  .estado { display:inline-block; background:#065f46; color:#6ee7b7; padding:3px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; margin-bottom:1rem; }
+  p { color:#94a3b8; line-height:1.6; font-size:0.95rem; }
+  a { display:block; background:#334155; color:#e2e8f0; text-decoration:none; padding:0.7rem 1rem; border-radius:8px; margin-top:0.6rem; font-size:0.9rem; }
+  a:hover { background:#475569; }
+  .app { background:#7c3aed; }
+</style>
+</head>
+<body>
+  <div class="caja">
+    <h1>MercApp API REST</h1>
+    <span class="estado">Servidor operativo</span>
+    <p>Backend del proyecto MercApp. Entrega los datos en formato JSON que consume la aplicacion frontend. No es la interfaz de usuario.</p>
+    <a class="app" href="https://iridescent-profiterole-b5ffbd.netlify.app" target="_blank">Ir a la aplicacion (Netlify)</a>
+    <a href="/api/health" target="_blank">Estado del servidor: /api/health</a>
+    <a href="/api/products" target="_blank">Productos en JSON: /api/products</a>
+    <a href="/api/categories" target="_blank">Categorias en JSON: /api/categories</a>
+  </div>
+</body>
+</html>`);
 });
 
 // Manejador para rutas API inexistentes
